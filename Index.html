@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KUK × Elsevier · KI im klinischen Wissensmanagement</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap');
+
+/* ══ TOKENS ══ */
+:root {
+–bg:      #080a0f;
+–bg2:     #0c0f18;
+–bg3:     #111520;
+–bg4:     #161b28;
+–cyan:    #00e5ff;
+–cyan-d:  #00b8cc;
+–cyan-f:  rgba(0,229,255,0.07);
+–gold:    #f0c060;
+–gold-d:  #c8a040;
+–gold-f:  rgba(240,192,96,0.07);
+–em:      #00e5a0;
+–em-d:    #00b87d;
+–em-f:    rgba(0,229,160,0.07);
+–rose:    #ff5c8a;
+–rose-f:  rgba(255,92,138,0.07);
+–kuk:     #8b1a1a;
+–kuk-l:   #b02020;
+–kuk-f:   rgba(139,26,26,0.12);
+–els:     #ff6b00;
+–els-f:   rgba(255,107,0,0.08);
+–text:    #c8d0e0;
+–tdim:    #6b7590;
+–thi:     #e8edf8;
+–bd:      rgba(255,255,255,0.06);
+–bd-c:    rgba(0,229,255,0.18);
+–bd-g:    rgba(240,192,96,0.18);
+–bd-e:    rgba(0,229,160,0.18);
+–bd-r:    rgba(255,92,138,0.18);
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+html,body{overflow-x:hidden;}
+body{background:var(–bg);color:var(–text);font-family:‘DM Sans’,sans-serif;font-size:16px;line-height:1.75;}
+
+/* NOISE */
+body::before{content:’’;position:fixed;inset:0;pointer-events:none;z-index:0;opacity:0.28;
+background-image:url(“data:image/svg+xml,%3Csvg viewBox=‘0 0 256 256’ xmlns=‘http://www.w3.org/2000/svg’%3E%3Cfilter id=‘n’%3E%3CfeTurbulence type=‘fractalNoise’ baseFrequency=‘0.9’ numOctaves=‘4’ stitchTiles=‘stitch’/%3E%3C/filter%3E%3Crect width=‘100%25’ height=‘100%25’ filter=‘url(%23n)’ opacity=‘0.04’/%3E%3C/svg%3E”);}
+
+h1,h2,h3,h4{font-family:‘Syne’,sans-serif;color:var(–thi);letter-spacing:-0.02em;}
+
+/* ══ CONFERENCE HEADER ══ */
+#conf-hdr{
+position:relative;z-index:50;
+background:var(–bg2);
+border-bottom:1px solid var(–bd);
+overflow:hidden;
+}
+#conf-hdr::before{
+content:’’;position:absolute;top:0;left:0;right:0;height:2px;
+background:linear-gradient(90deg,transparent,var(–kuk) 15%,var(–gold) 35%,var(–cyan) 55%,var(–em) 75%,var(–els) 90%,transparent);
+}
+.hdr-inner{
+max-width:1400px;margin:0 auto;padding:0 56px;
+display:grid;grid-template-columns:1fr auto 1fr;
+align-items:center;min-height:92px;gap:32px;
+}
+.hdr-left{display:flex;flex-direction:column;gap:4px;}
+.hdr-eyebrow{font-family:‘Space Mono’,monospace;font-size:9px;letter-spacing:0.28em;text-transform:uppercase;color:var(–gold);display:flex;align-items:center;gap:8px;}
+.hdr-eyebrow::before{content:’’;width:18px;height:1px;background:var(–gold);}
+.hdr-title{font-family:‘Syne’,sans-serif;font-weight:700;font-size:clamp(15px,1.6vw,21px);color:var(–thi);line-height:1.2;}
+.hdr-sub{font-family:‘Space Mono’,monospace;font-size:9px;letter-spacing:0.1em;color:var(–tdim);}
+.hdr-center{display:flex;align-items:center;gap:20px;flex-shrink:0;}
+.logo{font-family:‘Syne’,sans-serif;font-weight:800;font-size:22px;letter-spacing:0.06em;text-transform:uppercase;line-height:1;}
+.logo.kuk{color:var(–kuk);}
+.logo.els{color:var(–els);}
+.logo-x{font-family:‘Space Mono’,monospace;font-size:20px;color:var(–tdim);}
+.hdr-right{display:flex;flex-direction:column;align-items:flex-end;gap:4px;}
+.hdr-date{font-family:‘Syne’,sans-serif;font-weight:700;font-size:clamp(16px,2vw,26px);color:var(–thi);letter-spacing:-0.01em;}
+.hdr-loc{font-family:‘Space Mono’,monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(–tdim);}
+.hdr-live{display:flex;align-items:center;gap:6px;font-family:‘Space Mono’,monospace;font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:var(–em);margin-top:4px;}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(–em);animation:blink 2s ease infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0.3;}}
+
+/* ══ NAV ══ */
+nav{position:sticky;top:0;z-index:100;padding:12px 56px;display:flex;align-items:center;justify-content:space-between;background:rgba(8,10,15,0.96);backdrop-filter:blur(20px);border-bottom:1px solid var(–bd);}
+.nav-brand{font-family:‘Space Mono’,monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(–gold);}
+.nav-links{display:flex;gap:0;list-style:none;}
+.nav-links a{font-family:‘Space Mono’,monospace;font-size:8px;letter-spacing:0.12em;color:var(–tdim);text-decoration:none;text-transform:uppercase;padding:0 16px;border-right:1px solid var(–bd);line-height:1;transition:color 0.2s;}
+.nav-links li:last-child a{border-right:none;}
+.nav-links a:hover{color:var(–cyan);}
+
+/* ══ SECTIONS ══ */
+.section{position:relative;z-index:1;padding:100px 56px;max-width:1280px;margin:0 auto;}
+.section-wrap{position:relative;z-index:1;}
+.section-wrap.s-decision::before{content:’’;position:absolute;left:0;right:0;top:0;bottom:0;pointer-events:none;background:radial-gradient(ellipse 60% 40% at 50% 50%,rgba(0,229,255,0.025) 0%,transparent 70%);}
+.section-wrap.s-ck::before{content:’’;position:absolute;left:0;right:0;top:0;bottom:0;pointer-events:none;background:radial-gradient(ellipse 60% 40% at 50% 50%,rgba(240,192,96,0.025) 0%,transparent 70%);}
+.section-wrap.s-wp::before{content:’’;position:absolute;left:0;right:0;top:0;bottom:0;pointer-events:none;background:radial-gradient(ellipse 60% 40% at 50% 50%,rgba(0,229,160,0.025) 0%,transparent 70%);}
+.section-wrap.s-sym::before{content:’’;position:absolute;left:0;right:0;top:0;bottom:0;pointer-events:none;background:radial-gradient(ellipse 60% 40% at 50% 50%,rgba(255,107,0,0.025) 0%,transparent 70%);}
+.section-wrap.s-strat::before{content:’’;position:absolute;left:0;right:0;top:0;bottom:0;pointer-events:none;background:radial-gradient(ellipse 60% 40% at 50% 50%,rgba(255,92,138,0.025) 0%,transparent 70%);}
+
+/* ══ DIVIDERS ══ */
+.div-line{height:1px;background:linear-gradient(90deg,transparent,var(–bd),transparent);margin:0 56px;}
+.div-tri{height:1px;background:linear-gradient(90deg,transparent,rgba(139,26,26,0.3),rgba(240,192,96,0.2),rgba(0,229,255,0.15),rgba(0,229,160,0.15),rgba(255,107,0,0.2),transparent);margin:0 56px;}
+
+/* ══ HERO ══ */
+#hero{
+min-height:100vh;display:flex;flex-direction:column;justify-content:center;
+position:relative;overflow:hidden;padding:120px 56px 80px;
+}
+.hero-grid{position:absolute;inset:0;pointer-events:none;
+background-image:linear-gradient(rgba(0,229,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,255,0.02) 1px,transparent 1px);
+background-size:64px 64px;
+mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 20%,transparent 100%);}
+.hero-inner{position:relative;z-index:1;max-width:1000px;margin:0 auto;text-align:center;}
+
+.hero-eyebrow{font-family:‘Space Mono’,monospace;font-size:10px;letter-spacing:0.32em;text-transform:uppercase;color:var(–gold);margin-bottom:32px;opacity:0;animation:fadeUp 0.7s ease 0.2s forwards;display:flex;align-items:center;justify-content:center;gap:16px;}
+.hero-eyebrow::before,.hero-eyebrow::after{content:’’;flex:1;max-width:60px;height:1px;background:var(–gold);}
+
+.hero-h1{font-family:‘Syne’,sans-serif;font-weight:800;font-size:clamp(40px,5.5vw,78px);line-height:1.04;letter-spacing:-0.03em;margin-bottom:20px;opacity:0;animation:fadeUp 0.7s ease 0.4s forwards;}
+.hero-h1 .kuk-color{background:linear-gradient(105deg,#8b1a1a 0%,#ffffff 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hero-h1 .els-color{color:var(–els);-webkit-text-fill-color:var(–els);}
+.hero-h1 .rest{background:linear-gradient(105deg,#8b1a1a 0%,#ffffff 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+
+.hero-sub{font-family:‘Syne’,sans-serif;font-size:clamp(16px,2vw,24px);color:var(–tdim);margin-bottom:40px;letter-spacing:0.01em;opacity:0;animation:fadeUp 0.7s ease 0.6s forwards;}
+
+.hero-claim{font-size:clamp(15px,1.6vw,19px);line-height:1.9;color:var(–text);max-width:780px;margin:0 auto 56px;opacity:0;animation:fadeUp 0.7s ease 0.8s forwards;}
+
+/* FLOW TIMELINE */
+.flow-timeline{
+display:flex;align-items:center;justify-content:center;
+gap:0;margin-top:8px;flex-wrap:nowrap;
+opacity:0;animation:fadeUp 0.7s ease 1.0s forwards;
+overflow-x:auto;padding-bottom:8px;
+}
+.flow-node{
+display:flex;flex-direction:column;align-items:center;gap:8px;
+text-decoration:none;
+flex-shrink:0;
+}
+.flow-node-bubble{
+padding:14px 24px;border-radius:3px;
+font-family:‘Space Mono’,monospace;font-size:11px;font-weight:700;
+letter-spacing:0.1em;text-transform:uppercase;
+border:1.5px solid;
+transition:transform 0.2s,box-shadow 0.2s;
+white-space:nowrap;
+position:relative;
+}
+.flow-node:hover .flow-node-bubble{transform:translateY(-3px);}
+.flow-node-bubble.n1{border-color:rgba(0,229,255,0.4);color:var(–cyan);background:var(–cyan-f);box-shadow:0 0 20px rgba(0,229,255,0.1);}
+.flow-node-bubble.n2{border-color:rgba(240,192,96,0.4);color:var(–gold);background:var(–gold-f);box-shadow:0 0 20px rgba(240,192,96,0.1);}
+.flow-node-bubble.n3{border-color:rgba(0,229,160,0.4);color:var(–em);background:var(–em-f);box-shadow:0 0 20px rgba(0,229,160,0.1);}
+.flow-node-bubble.n4{border-color:rgba(255,107,0,0.4);color:var(–els);background:var(–els-f);box-shadow:0 0 20px rgba(255,107,0,0.1);}
+.flow-node-bubble.n5{border-color:rgba(255,92,138,0.4);color:var(–rose);background:var(–rose-f);box-shadow:0 0 20px rgba(255,92,138,0.1);}
+.flow-node-label{font-family:‘Space Mono’,monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:var(–tdim);}
+.flow-arrow{color:var(–tdim);font-size:20px;flex-shrink:0;padding:0 8px;margin-top:-24px;}
+
+/* ══ SECTION HEADER ══ */
+.sec-header{display:flex;align-items:flex-start;gap:40px;margin-bottom:64px;}
+.sec-num{
+font-family:‘Syne’,sans-serif;font-weight:800;
+font-size:clamp(80px,10vw,130px);line-height:0.82;letter-spacing:-0.05em;
+flex-shrink:0;
+-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.sec-num.c{background:linear-gradient(135deg,rgba(0,229,255,0.4),rgba(0,229,255,0.06));}
+.sec-num.g{background:linear-gradient(135deg,rgba(240,192,96,0.4),rgba(240,192,96,0.06));}
+.sec-num.e{background:linear-gradient(135deg,rgba(0,229,160,0.4),rgba(0,229,160,0.06));}
+.sec-num.o{background:linear-gradient(135deg,rgba(255,107,0,0.4),rgba(255,107,0,0.06));}
+.sec-num.r{background:linear-gradient(135deg,rgba(255,92,138,0.4),rgba(255,92,138,0.06));}
+.sec-title-block{padding-top:8px;}
+.sec-tag{font-family:‘Space Mono’,monospace;font-size:9px;letter-spacing:0.25em;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:10px;}
+.sec-tag::before{content:’’;display:inline-block;width:24px;height:1px;flex-shrink:0;}
+.sec-tag.c{color:var(–cyan);} .sec-tag.c::before{background:var(–cyan);}
+.sec-tag.g{color:var(–gold);} .sec-tag.g::before{background:var(–gold);}
+.sec-tag.e{color:var(–em);} .sec-tag.e::before{background:var(–em);}
+.sec-tag.o{color:var(–els);} .sec-tag.o::before{background:var(–els);}
+.sec-tag.r{color:var(–rose);} .sec-tag.r::before{background:var(–rose);}
+.sec-title-block h2{font-size:clamp(26px,3vw,44px);line-height:1.1;margin-bottom:16px;}
+.sec-title-block p{font-size:16px;color:var(–text);line-height:1.85;max-width:720px;}
+
+/* ══ CONTENT GRIDS ══ */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start;}
+.three-col{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;}
+
+/* Statement cards */
+.stmt-card{
+background:var(–bg2);border:1px solid var(–bd);
+padding:36px 32px;position:relative;overflow:hidden;
+transition:border-color 0.3s,transform 0.25s;
+}
+.stmt-card:hover{transform:translateY(-2px);}
+.stmt-card.c:hover{border-color:var(–bd-c);}
+.stmt-card.g:hover{border-color:var(–bd-g);}
+.stmt-card.e:hover{border-color:var(–bd-e);}
+.stmt-card.r:hover{border-color:var(–bd-r);}
+.stmt-card::before{content:’’;position:absolute;top:0;left:0;right:0;height:1px;opacity:0;transition:opacity 0.3s;}
+.stmt-card.c::before{background:linear-gradient(90deg,transparent,var(–cyan),transparent);}
+.stmt-card.g::before{background:linear-gradient(90deg,transparent,var(–gold),transparent);}
+.stmt-card.e::before{background:linear-gradient(90deg,transparent,var(–em),transparent);}
+.stmt-card.o::before{background:linear-gradient(90deg,transparent,var(–els),transparent);}
+.stmt-card.r::before{background:linear-gradient(90deg,transparent,var(–rose),transparent);}
+.stmt-card:hover::before{opacity:1;}
+.stmt-card h3{font-size:clamp(16px,1.8vw,20px);margin-bottom:12px;line-height:1.25;}
+.stmt-card p{font-size:14px;color:var(–text);line-height:1.75;}
+.card-tag{font-family:‘Space Mono’,monospace;font-size:8px;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:14px;}
+.card-tag.c{color:var(–cyan);}
+.card-tag.g{color:var(–gold);}
+.card-tag.e{color:var(–em);}
+.card-tag.o{color:var(–els);}
+.card-tag.r{color:var(–rose);}
+
+/* Pull quote */
+.pull{
+border-left:3px solid;padding:0 0 0 28px;margin:40px 0;
+font-family:‘Syne’,sans-serif;font-size:clamp(18px,2.5vw,28px);font-weight:600;
+line-height:1.45;color:var(–thi);
+}
+.pull.c{border-color:var(–cyan);}
+.pull.g{border-color:var(–gold);}
+.pull.e{border-color:var(–em);}
+.pull.o{border-color:var(–els);}
+.pull.r{border-color:var(–rose);}
+
+/* Highlight band */
+.band{
+padding:36px 40px;margin:48px 0;
+display:flex;align-items:center;gap:24px;flex-wrap:wrap;
+}
+.band.c{background:linear-gradient(90deg,rgba(0,229,255,0.06),rgba(0,229,255,0.03));border:1px solid rgba(0,229,255,0.15);}
+.band.g{background:linear-gradient(90deg,rgba(240,192,96,0.07),rgba(240,192,96,0.03));border:1px solid rgba(240,192,96,0.15);}
+.band.e{background:linear-gradient(90deg,rgba(0,229,160,0.06),rgba(0,229,160,0.03));border:1px solid rgba(0,229,160,0.15);}
+.band.o{background:linear-gradient(90deg,rgba(255,107,0,0.07),rgba(255,107,0,0.03));border:1px solid rgba(255,107,0,0.15);}
+.band.r{background:linear-gradient(90deg,rgba(255,92,138,0.06),rgba(255,92,138,0.03));border:1px solid rgba(255,92,138,0.15);}
+.band p{font-family:‘Syne’,sans-serif;font-size:clamp(14px,1.6vw,18px);font-weight:600;color:var(–thi);flex:1;line-height:1.5;}
+.band-tag{font-family:‘Space Mono’,monospace;font-size:8px;padding:5px 14px;border-radius:100px;letter-spacing:0.08em;white-space:nowrap;}
+.band-tag.c{border:1px solid var(–bd-c);color:var(–cyan);background:var(–cyan-f);}
+.band-tag.g{border:1px solid var(–bd-g);color:var(–gold);background:var(–gold-f);}
+.band-tag.e{border:1px solid var(–bd-e);color:var(–em);background:var(–em-f);}
+.band-tag.o{border:1px solid rgba(255,107,0,0.2);color:var(–els);background:var(–els-f);}
+.band-tag.r{border:1px solid var(–bd-r);color:var(–rose);background:var(–rose-f);}
+
+/* ══ HUMAN-IN-THE-LOOP SVG BLOCK ══ */
+.hitl-wrap{
+background:var(–bg2);border:1px solid var(–bd-c);
+padding:48px;display:flex;align-items:center;gap:56px;
+margin:48px 0;
+}
+.hitl-svg-col{flex-shrink:0;}
+.hitl-text{flex:1;}
+.hitl-text h3{font-size:clamp(20px,2.5vw,30px);margin-bottom:16px;line-height:1.2;}
+.hitl-text p{font-size:15px;color:var(–text);line-height:1.8;}
+
+/* ══ ARCH DIAGRAM (ClinicalKey) ══ */
+.arch-wrap{
+background:var(–bg2);border:1px solid var(–bd-g);
+padding:48px;margin:48px 0;
+}
+.arch-title{font-family:‘Space Mono’,monospace;font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:var(–gold);margin-bottom:24px;}
+
+/* ══ TRANSFORM FLOW ══ */
+.transform-flow{
+display:flex;align-items:stretch;gap:0;margin:48px 0;
+border:1px solid var(–bd);overflow:hidden;
+}
+.tf-step{
+flex:1;padding:32px 24px;text-align:center;
+border-right:1px solid var(–bd);
+transition:background 0.3s;position:relative;
+}
+.tf-step:last-child{border-right:none;}
+.tf-step:hover{background:var(–bg2);}
+.tf-step::after{
+content:‘→’;position:absolute;right:-14px;top:50%;transform:translateY(-50%);
+font-size:18px;color:var(–tdim);z-index:2;
+}
+.tf-step:last-child::after{display:none;}
+.tf-icon{font-size:32px;display:block;margin-bottom:12px;}
+.tf-label{font-family:‘Space Mono’,monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:8px;}
+.tf-label.c{color:var(–cyan);}
+.tf-label.g{color:var(–gold);}
+.tf-label.e{color:var(–em);}
+.tf-label.r{color:var(–rose);}
+.tf-text{font-family:‘Syne’,sans-serif;font-size:clamp(13px,1.4vw,16px);font-weight:600;color:var(–thi);line-height:1.3;}
+
+/* ══ META CLOSING ══ */
+#closing{
+background:var(–bg2);
+border-top:1px solid var(–bd);
+padding:100px 56px;
+position:relative;overflow:hidden;z-index:1;
+}
+#closing::before{
+content:’’;position:absolute;inset:0;pointer-events:none;
+background:radial-gradient(ellipse 80% 60% at 50% 100%,rgba(139,26,26,0.08) 0%,rgba(255,107,0,0.04) 30%,rgba(0,229,255,0.03) 60%,transparent 80%);
+}
+.closing-inner{position:relative;z-index:1;max-width:1100px;margin:0 auto;text-align:center;}
+.closing-eyebrow{font-family:‘Space Mono’,monospace;font-size:9px;letter-spacing:0.28em;text-transform:uppercase;color:var(–gold);margin-bottom:32px;display:flex;align-items:center;justify-content:center;gap:16px;}
+.closing-eyebrow::before,.closing-eyebrow::after{content:’’;flex:1;max-width:60px;height:1px;background:var(–gold);}
+.closing-h2{font-family:‘Syne’,sans-serif;font-weight:800;font-size:clamp(32px,4.5vw,60px);line-height:1.1;letter-spacing:-0.025em;margin-bottom:40px;}
+.closing-h2 em{font-style:normal;background:linear-gradient(135deg,var(–kuk),var(–els));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+
+/* Transformation arrow flow (closing) */
+.close-flow{
+display:flex;align-items:center;justify-content:center;gap:0;
+margin:48px 0;flex-wrap:wrap;
+}
+.cf-node{
+padding:20px 28px;
+font-family:‘Syne’,sans-serif;font-weight:700;
+font-size:clamp(13px,1.4vw,16px);
+border:1.5px solid;border-radius:3px;
+white-space:nowrap;
+transition:transform 0.2s;
+}
+.cf-node:hover{transform:scale(1.03);}
+.cf-node.bad{border-color:rgba(255,92,138,0.3);color:var(–rose);background:var(–rose-f);}
+.cf-node.mid{border-color:rgba(240,192,96,0.3);color:var(–gold);background:var(–gold-f);}
+.cf-node.gd1{border-color:rgba(0,229,255,0.3);color:var(–cyan);background:var(–cyan-f);}
+.cf-node.gd2{border-color:rgba(0,229,160,0.3);color:var(–em);background:var(–em-f);}
+.cf-arrow{font-size:24px;color:var(–tdim);padding:0 16px;flex-shrink:0;}
+
+.hitl-final{
+margin-top:56px;
+background:linear-gradient(135deg,rgba(0,229,255,0.05),rgba(240,192,96,0.05));
+border:1px solid;border-image:linear-gradient(90deg,var(–bd-c),var(–bd-g),var(–bd-e)) 1;
+padding:40px 48px;
+}
+.hitl-final p{font-family:‘Syne’,sans-serif;font-size:clamp(16px,2vw,22px);font-weight:600;color:var(–thi);line-height:1.6;}
+
+/* ══ KPI STRIP ══ */
+.kpi-strip{
+display:flex;border:1px solid var(–bd);overflow:hidden;
+margin:48px 0;
+}
+.kpi{flex:1;padding:28px 20px;text-align:center;border-right:1px solid var(–bd);transition:background 0.3s;}
+.kpi:last-child{border-right:none;}
+.kpi:hover{background:var(–bg2);}
+.kpi-val{font-family:‘Syne’,sans-serif;font-weight:800;font-size:22px;display:block;margin-bottom:6px;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.kpi-val.c{background:linear-gradient(135deg,var(–cyan),var(–cyan-d));}
+.kpi-val.g{background:linear-gradient(135deg,var(–gold),var(–gold-d));}
+.kpi-val.e{background:linear-gradient(135deg,var(–em),var(–em-d));}
+.kpi-val.o{background:linear-gradient(135deg,var(–els),#cc5500);}
+.kpi-val.r{background:linear-gradient(135deg,var(–rose),#cc3366);}
+.kpi-label{font-family:‘Space Mono’,monospace;font-size:8px;letter-spacing:0.12em;color:var(–tdim);text-transform:uppercase;}
+
+/* ══ FOOTER ══ */
+footer{border-top:1px solid var(–bd);padding:24px 56px;display:flex;align-items:center;justify-content:space-between;position:relative;z-index:1;}
+footer span{font-family:‘Space Mono’,monospace;font-size:8px;letter-spacing:0.14em;color:var(–tdim);text-transform:uppercase;}
+
+/* ══ ANIMATIONS ══ */
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+@keyframes dash-c{to{stroke-dashoffset:-60;}}
+@keyframes dash-g{to{stroke-dashoffset:-60;}}
+@keyframes spin-s{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+@keyframes pulse-r{0%,100%{r:42;}50%{r:46;}}
+@keyframes node-glow{0%,100%{opacity:0.7;}50%{opacity:1;}}
+
+/* ══ RESPONSIVE ══ */
+@media(max-width:1024px){
+.hdr-inner{grid-template-columns:1fr;padding:20px;gap:12px;}
+.hdr-right{align-items:flex-start;}
+.section{padding:64px 24px;}
+.div-line,.div-tri{margin:0 24px;}
+nav{padding:12px 24px;}
+.nav-links{display:none;}
+.two-col,.three-col{grid-template-columns:1fr;}
+.hitl-wrap{flex-direction:column;padding:32px;}
+.transform-flow{flex-direction:column;}
+.tf-step{border-right:none;border-bottom:1px solid var(–bd);}
+.tf-step::after{content:‘↓’;right:50%;top:auto;bottom:-18px;transform:translateX(50%);}
+.tf-step:last-child::after{display:none;}
+.close-flow{flex-direction:column;align-items:center;}
+.sec-header{flex-direction:column;gap:12px;}
+.sec-num{font-size:64px;}
+.hitl-final{padding:28px 24px;}
+footer{flex-direction:column;gap:10px;padding:20px;}
+.kpi-strip{flex-wrap:wrap;}
+.kpi{min-width:140px;border-bottom:1px solid var(–bd);}
+#closing{padding:60px 24px;}
+.closing-h2{font-size:clamp(26px,6vw,44px);}
+}
+</style>
+
+</head>
+<body>
+
+<!-- ══ CONFERENCE HEADER ══ -->
+
+<header id="conf-hdr">
+  <div class="hdr-inner">
+    <div class="hdr-left">
+      <span class="hdr-eyebrow">Strategietermin · Kooperation</span>
+      <div class="hdr-title">KI im klinischen Wissensmanagement — Von Evidence zu Vertrauen zu Struktur</div>
+      <div class="hdr-sub">Kepler Universitätsklinikum Linz × Elsevier Health Sciences</div>
+    </div>
+    <div class="hdr-center">
+      <span class="logo kuk">KUK</span>
+      <span class="logo-x">×</span>
+      <span class="logo els">Elsevier</span>
+    </div>
+    <div class="hdr-right">
+      <div class="hdr-date">04. Mai 2026</div>
+      <div class="hdr-loc">Linz, Österreich</div>
+      <div class="hdr-live"><span class="live-dot"></span>Strategiepräsentation</div>
+    </div>
+  </div>
+</header>
+
+<!-- ══ NAV ══ -->
+
+<nav>
+  <span class="nav-brand">KUK × Elsevier · 04.05.2026</span>
+  <ul class="nav-links">
+    <li><a href="#decision">Decision</a></li>
+    <li><a href="#clinicalkey">ClinicalKey AI+</a></li>
+    <li><a href="#whitepaper">White Paper</a></li>
+    <li><a href="#symposium">Symposium</a></li>
+    <li><a href="#strategie">Strategie</a></li>
+    <li><a href="#closing">Synthese</a></li>
+  </ul>
+</nav>
+
+<!-- ══════════════════════════
+     HERO
+══════════════════════════ -->
+
+<section id="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+
+```
+<p class="hero-eyebrow">KUK und Elsevier im klinischen Wissensmanagement</p>
+
+<h1 class="hero-h1">
+  <span class="kuk-color">KUK</span>
+  <span style="color:rgba(180,100,100,0.6)"> × </span>
+  <span class="els-color">Elsevier</span>
+  <br>
+  <span class="rest">KI im klinischen<br>Wissensmanagement</span>
+</h1>
+
+<p class="hero-sub">Von Evidence zu Vertrauen zu Struktur</p>
+
+<p class="hero-claim">
+  Diese Kooperation wird nicht über Tools gedacht — sondern über die Transformation ärztlicher Entscheidungsprozesse unter KI-Einfluss. Mit klarem Fokus auf Human Oversight, evidenzbasierter Methodik und institutioneller Verantwortung.
+</p>
+
+<!-- FLOW TIMELINE -->
+<div class="flow-timeline">
+  <a href="#decision" class="flow-node">
+    <div class="flow-node-bubble n1">DECISION</div>
+    <span class="flow-node-label">Einstieg</span>
+  </a>
+  <span class="flow-arrow">→</span>
+  <a href="#clinicalkey" class="flow-node">
+    <div class="flow-node-bubble n2">ClinicalKey AI+</div>
+    <span class="flow-node-label">POC</span>
+  </a>
+  <span class="flow-arrow">→</span>
+  <a href="#whitepaper" class="flow-node">
+    <div class="flow-node-bubble n3">White Paper</div>
+    <span class="flow-node-label">Positionierung</span>
+  </a>
+  <span class="flow-arrow">→</span>
+  <a href="#symposium" class="flow-node">
+    <div class="flow-node-bubble n4">Symposium</div>
+    <span class="flow-node-label">Sichtbarkeit</span>
+  </a>
+  <span class="flow-arrow">→</span>
+  <a href="#strategie" class="flow-node">
+    <div class="flow-node-bubble n5">Lizenzierung</div>
+    <span class="flow-node-label">Bewusst am Ende</span>
+  </a>
+</div>
+```
+
+  </div>
+</section>
+
+<div class="div-tri"></div>
+
+<!-- ══════════════════════════
+     SEKTION 1: DECISION
+══════════════════════════ -->
+
+<div class="section-wrap s-decision">
+<section class="section" id="decision">
+
+  <div class="sec-header">
+    <div class="sec-num c">1</div>
+    <div class="sec-title-block">
+      <p class="sec-tag c">Einstieg über Inhalt</p>
+      <h2>DECISION — wissenschaftlicher Einstiegspunkt</h2>
+      <p>Die logische Brücke von Trial zu Proof of Concept zu wissenschaftlichen Projekten — über die zentrale Frage, die Medizin und KI verbindet: Was passiert mit dem ärztlichen Denken?</p>
+    </div>
+  </div>
+
+  <!-- Human-in-the-Loop Visual -->
+
+  <div class="hitl-wrap">
+    <div class="hitl-svg-col">
+      <svg viewBox="0 0 320 320" width="280" height="280" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <filter id="glow-c"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          <filter id="glow-sm"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        </defs>
+
+```
+    <!-- Outer orbit -->
+    <circle cx="160" cy="160" r="130" fill="none" stroke="rgba(0,229,255,0.08)" stroke-width="1.5"/>
+    <circle cx="160" cy="160" r="130" fill="none" stroke="rgba(0,229,255,0.15)" stroke-width="1" stroke-dasharray="6 10" style="animation:spin-s 30s linear infinite;transform-origin:160px 160px;"/>
+
+    <!-- Inner ring -->
+    <circle cx="160" cy="160" r="82" fill="none" stroke="rgba(0,229,255,0.06)" stroke-width="1"/>
+
+    <!-- KI orbit nodes -->
+    <!-- Evidence -->
+    <circle cx="160" cy="30" r="22" fill="rgba(0,229,255,0.06)" stroke="rgba(0,229,255,0.3)" stroke-width="1.5" filter="url(#glow-sm)"/>
+    <text x="160" y="26" text-anchor="middle" font-family="Space Mono,monospace" font-size="7.5" fill="#00e5ff">Evidence</text>
+    <text x="160" y="37" text-anchor="middle" font-family="Space Mono,monospace" font-size="7" fill="rgba(0,229,255,0.6)">Elsevier</text>
+
+    <!-- Diagnostik -->
+    <circle cx="271" cy="105" r="22" fill="rgba(240,192,96,0.06)" stroke="rgba(240,192,96,0.3)" stroke-width="1.5" filter="url(#glow-sm)"/>
+    <text x="271" y="101" text-anchor="middle" font-family="Space Mono,monospace" font-size="7.5" fill="#f0c060">Diagnostik</text>
+    <text x="271" y="112" text-anchor="middle" font-family="Space Mono,monospace" font-size="7" fill="rgba(240,192,96,0.6)">KI-Assist</text>
+
+    <!-- Therapie -->
+    <circle cx="271" cy="215" r="22" fill="rgba(240,192,96,0.06)" stroke="rgba(240,192,96,0.3)" stroke-width="1.5" filter="url(#glow-sm)"/>
+    <text x="271" y="211" text-anchor="middle" font-family="Space Mono,monospace" font-size="7.5" fill="#f0c060">Therapie</text>
+    <text x="271" y="222" text-anchor="middle" font-family="Space Mono,monospace" font-size="7" fill="rgba(240,192,96,0.6)">SOP-Baum</text>
+
+    <!-- Governance -->
+    <circle cx="160" cy="290" r="22" fill="rgba(255,92,138,0.06)" stroke="rgba(255,92,138,0.3)" stroke-width="1.5" filter="url(#glow-sm)"/>
+    <text x="160" y="286" text-anchor="middle" font-family="Space Mono,monospace" font-size="7.5" fill="#ff5c8a">Oversight</text>
+    <text x="160" y="297" text-anchor="middle" font-family="Space Mono,monospace" font-size="7" fill="rgba(255,92,138,0.6)">Governance</text>
+
+    <!-- IT -->
+    <circle cx="49" cy="215" r="22" fill="rgba(0,229,160,0.06)" stroke="rgba(0,229,160,0.3)" stroke-width="1.5" filter="url(#glow-sm)"/>
+    <text x="49" y="211" text-anchor="middle" font-family="Space Mono,monospace" font-size="7.5" fill="#00e5a0">Med. IT</text>
+    <text x="49" y="222" text-anchor="middle" font-family="Space Mono,monospace" font-size="7" fill="rgba(0,229,160,0.6)">Interop.</text>
+
+    <!-- Forschung -->
+    <circle cx="49" cy="105" r="22" fill="rgba(0,229,160,0.06)" stroke="rgba(0,229,160,0.3)" stroke-width="1.5" filter="url(#glow-sm)"/>
+    <text x="49" y="101" text-anchor="middle" font-family="Space Mono,monospace" font-size="7.5" fill="#00e5a0">Forschung</text>
+    <text x="49" y="112" text-anchor="middle" font-family="Space Mono,monospace" font-size="7" fill="rgba(0,229,160,0.6)">White Paper</text>
+
+    <!-- Spokes -->
+    <line x1="160" y1="108" x2="160" y2="52" stroke="rgba(0,229,255,0.2)" stroke-width="1" stroke-dasharray="4 6" style="animation:dash-c 2s linear infinite;"/>
+    <line x1="200" y1="132" x2="250" y2="108" stroke="rgba(240,192,96,0.2)" stroke-width="1" stroke-dasharray="4 6" style="animation:dash-g 2.4s linear infinite;"/>
+    <line x1="200" y1="188" x2="250" y2="212" stroke="rgba(240,192,96,0.2)" stroke-width="1" stroke-dasharray="4 6" style="animation:dash-g 2.8s linear infinite 0.5s;"/>
+    <line x1="160" y1="212" x2="160" y2="268" stroke="rgba(255,92,138,0.2)" stroke-width="1" stroke-dasharray="4 6" style="animation:dash-c 2.2s linear infinite;"/>
+    <line x1="120" y1="188" x2="70" y2="212" stroke="rgba(0,229,160,0.2)" stroke-width="1" stroke-dasharray="4 6" style="animation:dash-c 2.6s linear infinite 0.3s;"/>
+    <line x1="120" y1="132" x2="70" y2="108" stroke="rgba(0,229,160,0.2)" stroke-width="1" stroke-dasharray="4 6" style="animation:dash-c 2s linear infinite 0.7s;"/>
+
+    <!-- CENTER: Arzt -->
+    <circle cx="160" cy="160" r="52" fill="rgba(0,229,255,0.04)" stroke="rgba(0,229,255,0.25)" stroke-width="2" filter="url(#glow-c)"/>
+    <circle cx="160" cy="160" r="42" fill="#111520" stroke="rgba(0,229,255,0.4)" stroke-width="1.5" filter="url(#glow-c)"/>
+    <text x="160" y="152" text-anchor="middle" font-size="26">🩺</text>
+    <text x="160" y="167" text-anchor="middle" font-family="Space Mono,monospace" font-size="8" fill="rgba(0,229,255,0.8)" letter-spacing="0.5">ARZT</text>
+    <text x="160" y="178" text-anchor="middle" font-family="Space Mono,monospace" font-size="7" fill="rgba(0,229,255,0.45)">im Zentrum</text>
+
+    <!-- Traveling dots -->
+    <circle r="3.5" fill="#00e5ff" filter="url(#glow-sm)"><animateMotion dur="2.5s" repeatCount="indefinite"><mpath href="#sp1"/></animateMotion></circle>
+    <path id="sp1" d="M160 108 L160 54" fill="none"/>
+    <circle r="3.5" fill="#f0c060" filter="url(#glow-sm)"><animateMotion dur="3s" repeatCount="indefinite" begin="0.8s"><mpath href="#sp2"/></animateMotion></circle>
+    <path id="sp2" d="M200 132 L250 110" fill="none"/>
+    <circle r="3.5" fill="#00e5a0" filter="url(#glow-sm)"><animateMotion dur="2.7s" repeatCount="indefinite" begin="1.4s"><mpath href="#sp3"/></animateMotion></circle>
+    <path id="sp3" d="M120 132 L70 110" fill="none"/>
+  </svg>
+</div>
+
+<div class="hitl-text">
+  <h3>Was passiert mit dem ärztlichen Denken?</h3>
+  <p>Der Arzt bleibt im Zentrum. KI augmentiert — sie ersetzt nicht. Die zentrale Frage dieser Kooperation ist keine technische: Sie ist eine epistemische. Wie verändert sich ärztliche Entscheidungsfindung, wenn Evidence in Echtzeit verfügbar ist — und wie stellen wir sicher, dass Vertrauen kalibriert bleibt?</p>
+  <div style="margin-top:24px;display:flex;flex-wrap:wrap;gap:8px;">
+    <span style="font-family:'Space Mono',monospace;font-size:8px;padding:5px 14px;border-radius:100px;border:1px solid var(--bd-c);color:var(--cyan);background:var(--cyan-f);">Human-in-the-Loop</span>
+    <span style="font-family:'Space Mono',monospace;font-size:8px;padding:5px 14px;border-radius:100px;border:1px solid var(--bd-g);color:var(--gold);background:var(--gold-f);">Calibrated Trust</span>
+    <span style="font-family:'Space Mono',monospace;font-size:8px;padding:5px 14px;border-radius:100px;border:1px solid var(--bd-e);color:var(--em);background:var(--em-f);">Bounded Autonomy</span>
+    <span style="font-family:'Space Mono',monospace;font-size:8px;padding:5px 14px;border-radius:100px;border:1px solid var(--bd-r);color:var(--rose);background:var(--rose-f);">Kein Patientendaten-POC</span>
+  </div>
+</div>
+```
+
+  </div>
+
+  <div class="three-col">
+    <div class="stmt-card c">
+      <p class="card-tag c">Strategie</p>
+      <h3>Einstieg über Inhalt</h3>
+      <p>Trial → POC → Projekt DECISION. Die natürliche Logik von Vertrauen — und die Grundlage dieser Kooperation.</p>
+    </div>
+    <div class="stmt-card g">
+      <p class="card-tag g">Positionierung Elsevier</p>
+      <h3>Forschungspartner, nicht Anbieter</h3>
+      <p>Elsevier tritt in dieser Kooperation als strategischer Forschungspartner auf — mit Advisory-Board-Perspektive auf klinische Wissensprozesse.</p>
+    </div>
+    <div class="stmt-card c">
+      <p class="card-tag c" style="color:var(--tdim);">Marktkontext</p>
+      <h3>OpenEvidence-Lücke</h3>
+      <p>OpenEvidence wurde in Europa eingeschränkt. Der Bedarf für eine institutionalisierte, governance-konforme Lösung ist real und dringend.</p>
+    </div>
+  </div>
+
+  <div class="pull c">&bdquo;Der Arzt entscheidet. Immer.<br>KI macht ihn dabei besser informiert.&rdquo;</div>
+
+  <div class="band c">
+    <p>Gemeinsame Kooperationsbausteine dieser Partnerschaft</p>
+    <span class="band-tag c">Gemeinsames Whitepaper</span>
+    <span class="band-tag c">Aufbau eines Symposiums</span>
+  </div>
+
+</section>
+</div>
+
+<div class="div-line"></div>
+
+<!-- ══════════════════════════
+     SEKTION 2: ClinicalKey AI+
+══════════════════════════ -->
+
+<div class="section-wrap s-ck">
+<section class="section" id="clinicalkey">
+
+  <div class="sec-header">
+    <div class="sec-num g">2</div>
+    <div class="sec-title-block">
+      <p class="sec-tag g">POC als Ordnungsrahmen</p>
+      <h2>ClinicalKey AI+ — Antwort auf Schatten-KI</h2>
+      <p>Clinical Reasoning Support Systems (CRSS) wie ClinicalKey AI+ oder OpenEvidence schaffen den Ordnungsrahmen, den Kliniker für eine strukturierte Echtzeit-Literaturrecherche benötigen.</p>
+    </div>
+  </div>
+
+  <div class="pull g">&bdquo;Das Problem ist nicht KI.<br>Das Problem ist Strukturlosigkeit.&rdquo;</div>
+
+  <!-- Architecture diagram -->
+
+  <div class="arch-wrap">
+    <p class="arch-title">ClinicalKey AI+ — Systemarchitektur &amp; Datenflüsse</p>
+    <svg viewBox="0 0 900 340" width="100%" style="max-width:100%;display:block;" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <filter id="glow-g2"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        <marker id="arr-g" markerWidth="7" markerHeight="5" refX="5" refY="2.5" orient="auto">
+          <polygon points="0 0, 7 2.5, 0 5" fill="rgba(240,192,96,0.5)"/>
+        </marker>
+        <marker id="arr-c" markerWidth="7" markerHeight="5" refX="5" refY="2.5" orient="auto">
+          <polygon points="0 0, 7 2.5, 0 5" fill="rgba(0,229,255,0.5)"/>
+        </marker>
+        <marker id="arr-e" markerWidth="7" markerHeight="5" refX="5" refY="2.5" orient="auto">
+          <polygon points="0 0, 7 2.5, 0 5" fill="rgba(0,229,160,0.4)"/>
+        </marker>
+        <marker id="arr-r" markerWidth="7" markerHeight="5" refX="5" refY="2.5" orient="auto">
+          <polygon points="0 0, 7 2.5, 0 5" fill="rgba(255,92,138,0.4)"/>
+        </marker>
+      </defs>
+
+```
+  <!-- CHAOS zone (left) -->
+  <rect x="20" y="60" width="140" height="220" rx="4" fill="rgba(255,92,138,0.04)" stroke="rgba(255,92,138,0.15)" stroke-width="1.5"/>
+  <text x="90" y="45" text-anchor="middle" font-family="Space Mono,monospace" font-size="9" fill="rgba(255,92,138,0.6)" letter-spacing="1">SCHATTEN-KI</text>
+  <text x="90" y="110" text-anchor="middle" font-size="22">🤖</text>
+  <text x="90" y="128" text-anchor="middle" font-family="Space Mono,monospace" font-size="8" fill="rgba(255,92,138,0.7)">ChatGPT</text>
+  <text x="90" y="175" text-anchor="middle" font-size="22">📱</text>
+  <text x="90" y="193" text-anchor="middle" font-family="Space Mono,monospace" font-size="8" fill="rgba(255,92,138,0.7)">Consumer Apps</text>
+  <text x="90" y="240" text-anchor="middle" font-size="22">❓</text>
+  <text x="90" y="258" text-anchor="middle" font-family="Space Mono,monospace" font-size="8" fill="rgba(255,92,138,0.7)">Unkontrolliert</text>
+
+  <!-- Arrow chaos → CK -->
+  <line x1="162" y1="170" x2="228" y2="170" stroke="rgba(255,92,138,0.3)" stroke-width="1.5" stroke-dasharray="4 5" marker-end="url(#arr-r)"/>
+  <text x="195" y="160" text-anchor="middle" font-family="Space Mono,monospace" font-size="7.5" fill="rgba(255,92,138,0.5)">strukturieren</text>
+
+  <!-- CENTER: ClinicalKey AI+ -->
+  <rect x="230" y="40" width="200" height="260" rx="4" fill="rgba(240,192,96,0.06)" stroke="rgba(240,192,96,0.35)" stroke-width="2" filter="url(#glow-g2)"/>
+  <text x="330" y="25" text-anchor="middle" font-family="Space Mono,monospace" font-size="9" fill="rgba(240,192,96,0.6)" letter-spacing="1">ORDNUNGSRAHMEN</text>
+  <text x="330" y="82" text-anchor="middle" font-family="Syne,sans-serif" font-size="15" font-weight="700" fill="#f0c060">ClinicalKey AI+</text>
+
+  <!-- 4 pillars inside CK -->
+  <rect x="246" y="96" width="168" height="36" rx="2" fill="rgba(0,229,255,0.07)" stroke="rgba(0,229,255,0.2)" stroke-width="1"/>
+  <text x="330" y="112" text-anchor="middle" font-family="Space Mono,monospace" font-size="8.5" fill="#00e5ff">Governance-Struktur</text>
+  <text x="330" y="124" text-anchor="middle" font-family="Space Mono,monospace" font-size="7" fill="rgba(0,229,255,0.5)">DSGVO · MDR · Audit</text>
+
+  <rect x="246" y="142" width="168" height="36" rx="2" fill="rgba(240,192,96,0.07)" stroke="rgba(240,192,96,0.2)" stroke-width="1"/>
+  <text x="330" y="158" text-anchor="middle" font-family="Space Mono,monospace" font-size="8.5" fill="#f0c060">Workflow-Integration</text>
+  <text x="330" y="170" text-anchor="middle" font-family="Space Mono,monospace" font-size="7" fill="rgba(240,192,96,0.5)">KIS · PACS · EHR</text>
+
+  <rect x="246" y="188" width="168" height="36" rx="2" fill="rgba(0,229,160,0.07)" stroke="rgba(0,229,160,0.2)" stroke-width="1"/>
+  <text x="330" y="204" text-anchor="middle" font-family="Space Mono,monospace" font-size="8.5" fill="#00e5a0">Evidenz-Engine</text>
+  <text x="330" y="216" text-anchor="middle" font-family="Space Mono,monospace" font-size="7" fill="rgba(0,229,160,0.5)">Elsevier · PubMed</text>
+
+  <rect x="246" y="234" width="168" height="36" rx="2" fill="rgba(255,92,138,0.07)" stroke="rgba(255,92,138,0.2)" stroke-width="1"/>
+  <text x="330" y="250" text-anchor="middle" font-family="Space Mono,monospace" font-size="8.5" fill="#ff5c8a">Human Oversight</text>
+  <text x="330" y="262" text-anchor="middle" font-family="Space Mono,monospace" font-size="7" fill="rgba(255,92,138,0.5)">Arzt · Validierung · Audit Trail</text>
+
+  <!-- Arrows CK → outputs -->
+  <line x1="430" y1="120" x2="496" y2="100" stroke="rgba(0,229,255,0.35)" stroke-width="1.5" marker-end="url(#arr-c)"/>
+  <line x1="430" y1="160" x2="496" y2="175" stroke="rgba(240,192,96,0.35)" stroke-width="1.5" marker-end="url(#arr-g)"/>
+  <line x1="430" y1="200" x2="496" y2="250" stroke="rgba(0,229,160,0.3)" stroke-width="1.5" marker-end="url(#arr-e)"/>
+
+  <!-- Output boxes -->
+  <rect x="498" y="60" width="150" height="60" rx="3" fill="rgba(0,229,255,0.05)" stroke="rgba(0,229,255,0.2)" stroke-width="1.5"/>
+  <text x="573" y="85" text-anchor="middle" font-family="Space Mono,monospace" font-size="9" fill="#00e5ff">Klinik &amp; Ärzte</text>
+  <text x="573" y="100" text-anchor="middle" font-family="Space Mono,monospace" font-size="7.5" fill="rgba(0,229,255,0.5)">Unterstützte Entscheidung</text>
+
+  <rect x="498" y="145" width="150" height="60" rx="3" fill="rgba(240,192,96,0.05)" stroke="rgba(240,192,96,0.2)" stroke-width="1.5"/>
+  <text x="573" y="170" text-anchor="middle" font-family="Space Mono,monospace" font-size="9" fill="#f0c060">IT &amp; Recht</text>
+  <text x="573" y="185" text-anchor="middle" font-family="Space Mono,monospace" font-size="7.5" fill="rgba(240,192,96,0.5)">Compliance · Traceability</text>
+
+  <rect x="498" y="230" width="150" height="60" rx="3" fill="rgba(0,229,160,0.05)" stroke="rgba(0,229,160,0.2)" stroke-width="1.5"/>
+  <text x="573" y="255" text-anchor="middle" font-family="Space Mono,monospace" font-size="9" fill="#00e5a0">Forschung</text>
+  <text x="573" y="270" text-anchor="middle" font-family="Space Mono,monospace" font-size="7.5" fill="rgba(0,229,160,0.5)">Daten · Erkenntnisse</text>
+
+  <!-- KUK label -->
+  <rect x="680" y="60" width="200" height="230" rx="4" fill="rgba(139,26,26,0.06)" stroke="rgba(139,26,26,0.2)" stroke-width="1.5"/>
+  <text x="780" y="88" text-anchor="middle" font-family="Syne,sans-serif" font-size="18" font-weight="700" fill="#8b1a1a">KUK</text>
+  <text x="780" y="106" text-anchor="middle" font-family="Space Mono,monospace" font-size="7.5" fill="rgba(139,26,26,0.7)">Kepler Universitätsklinikum</text>
+  <line x1="648" y1="90" x2="678" y2="95" stroke="rgba(0,229,255,0.3)" stroke-width="1.5" marker-end="url(#arr-c)"/>
+  <line x1="648" y1="175" x2="678" y2="170" stroke="rgba(240,192,96,0.3)" stroke-width="1.5" marker-end="url(#arr-g)"/>
+  <line x1="648" y1="260" x2="678" y2="255" stroke="rgba(0,229,160,0.3)" stroke-width="1.5" marker-end="url(#arr-e)"/>
+  <text x="780" y="160" text-anchor="middle" font-size="28">🏥</text>
+  <text x="780" y="195" text-anchor="middle" font-family="Space Mono,monospace" font-size="8" fill="rgba(139,26,26,0.6)">Notaufnahme</text>
+  <text x="780" y="208" text-anchor="middle" font-family="Space Mono,monospace" font-size="8" fill="rgba(139,26,26,0.6)">Station · OP</text>
+  <text x="780" y="225" text-anchor="middle" font-family="Space Mono,monospace" font-size="8" fill="rgba(139,26,26,0.6)">Wissensmanagement</text>
+</svg>
+```
+
+  </div>
+
+  <div class="two-col">
+    <div class="stmt-card g">
+      <p class="card-tag g">Realität heute</p>
+      <h3>Schatten-KI ist bereits da</h3>
+      <p>Ärzte nutzen ChatGPT, Consumer-Apps und ungeprüfte KI-Tools — täglich, informell, ohne Governance. Das ist keine Hypothese. Es ist Klinikalltag.</p>
+    </div>
+    <div class="stmt-card c">
+      <p class="card-tag c">Lösung</p>
+      <h3>Struktur statt Verbot</h3>
+      <p>ClinicalKey AI+ ist keine Beschränkung — es ist die institutionelle Antwort. Governance, Workflow-Integration und evidenzbasierte Entscheidungsunterstützung in einem System.</p>
+    </div>
+  </div>
+
+</section>
+</div>
+
+<div class="div-line"></div>
+
+<!-- ══════════════════════════
+     SEKTION 3: WHITE PAPER
+══════════════════════════ -->
+
+<div class="section-wrap s-wp">
+<section class="section" id="whitepaper">
+
+  <div class="sec-header">
+    <div class="sec-num e">3</div>
+    <div class="sec-title-block">
+      <p class="sec-tag e">Strategische Positionierung</p>
+      <h2>White Paper — Mindestziel mit maximaler Wirkung</h2>
+      <p>Ein strategisches White Paper positioniert KUK im europäischen KI-Diskurs. Minimaler Aufwand. Maximale Sichtbarkeit. Mit Elsevier als Verstärker.</p>
+    </div>
+  </div>
+
+  <div class="pull e">&bdquo;Europäische Referenz schaffen —<br>nicht nur best practice, sondern Maßstab.&rdquo;</div>
+
+  <div class="three-col">
+    <div class="stmt-card e">
+      <p class="card-tag e">Thema 01</p>
+      <h3>Human Oversight</h3>
+      <p>Wie bleibt der Arzt im Entscheidungsprozess zentral, wenn KI immer schneller und präziser wird? Das ist die Kernfrage medizinischer KI-Governance.</p>
+    </div>
+    <div class="stmt-card e">
+      <p class="card-tag e">Thema 02</p>
+      <h3>Calibrated Trust</h3>
+      <p>Vertrauen in KI-Empfehlungen darf weder blind noch reflexartig ablehnend sein. Kalibriertes Vertrauen ist eine klinische Kompetenz — die entwickelt und gemessen werden muss.</p>
+    </div>
+    <div class="stmt-card e">
+      <p class="card-tag e">Thema 03</p>
+      <h3>Evidenzbasierte Transformation</h3>
+      <p>Nicht KI um der KI willen. Jede Implementierung muss evidenzbasiert geplant, evaluiert und kommuniziert werden — intern wie extern.</p>
+    </div>
+  </div>
+
+  <div class="band e">
+    <p>Ein White Paper ist kein Dokument. Es ist ein Signal. KUK setzt es — Elsevier gibt ihm internationale Reichweite.</p>
+    <span class="band-tag e">Europäische Referenz</span>
+    <span class="band-tag e">Open Access möglich</span>
+    <span class="band-tag e">Kongresspräsenz</span>
+    <span class="band-tag e">Peer-Review-Pfad</span>
+  </div>
+
+</section>
+</div>
+
+<div class="div-line"></div>
+
+<!-- ══════════════════════════
+     SEKTION 4: SYMPOSIUM
+══════════════════════════ -->
+
+<div class="section-wrap s-sym">
+<section class="section" id="symposium">
+
+  <div class="sec-header">
+    <div class="sec-num o">4</div>
+    <div class="sec-title-block">
+      <p class="sec-tag o">Sichtbarer Outcome</p>
+      <h2>Symposium — Leuchtturm der Kooperation</h2>
+      <p>Das Symposium findet statt. Der Kooperationsgrad ist offen. Aber der Anlass schafft Sichtbarkeit — nach innen und nach außen — auf einem Niveau, das einzelne Institutionen allein nicht erreichen.</p>
+    </div>
+  </div>
+
+  <div class="pull o">&bdquo;Nicht nur forschen — sichtbar führen.&rdquo;</div>
+
+  <div class="two-col">
+    <div class="stmt-card o" style="border-color:rgba(255,107,0,0.2);">
+      <p class="card-tag o">Was Elsevier einbringt</p>
+      <h3>Zugang zu Top-Speakern</h3>
+      <p>Elsevier bringt internationale Expertise, Netzwerke in Wissenschaft und Klinik, und die Glaubwürdigkeit eines global tätigen Wissenschaftsverlags. Das öffnet Türen, die national geschlossen bleiben.</p>
+    </div>
+    <div class="stmt-card o" style="border-color:rgba(255,107,0,0.2);">
+      <p class="card-tag o">Was KUK einbringt</p>
+      <h3>Klinische Substanz &amp; Standort</h3>
+      <p>KUK bringt reale klinische Implementierungserfahrung, ein exzellentes Umfeld in Linz und die Glaubwürdigkeit eines führenden österreichischen Universitätsklinikums.</p>
+    </div>
+  </div>
+
+  <div class="band o">
+    <p>Ein gemeinsames Symposium ist kein Event. Es ist ein Statement — dass klinische KI-Governance nicht nur diskutiert, sondern praktiziert wird.</p>
+    <span class="band-tag o">Hybridformat möglich</span>
+    <span class="band-tag o">Europäischer Scope</span>
+    <span class="band-tag o">Medizin · IT · Ethik · Recht</span>
+  </div>
+
+</section>
+</div>
+
+<div class="div-line"></div>
+
+<!-- ══════════════════════════
+     SEKTION 5: STRATEGIE & LIZENZ
+══════════════════════════ -->
+
+<div class="section-wrap s-strat">
+<section class="section" id="strategie">
+
+  <div class="sec-header">
+    <div class="sec-num r">5</div>
+    <div class="sec-title-block">
+      <p class="sec-tag r">Bewusst am Ende</p>
+      <h2>Strategische Integration &amp; Lizenzierung</h2>
+      <p>Erst Vertrauen schaffen — dann Struktur bauen. Das ist kein taktisches Prinzip. Es ist das Fundament jeder nachhaltigen institutionellen Zusammenarbeit.</p>
+    </div>
+  </div>
+
+  <div class="pull r">&bdquo;Vertrauen kommt zuerst.<br>Lizenzierung folgt.&rdquo;</div>
+
+  <!-- Transform flow -->
+
+  <div class="transform-flow">
+    <div class="tf-step">
+      <span class="tf-icon">🔬</span>
+      <p class="tf-label c">Phase 1</p>
+      <p class="tf-text">DECISION<br>Wissenschaftlicher Einstieg</p>
+    </div>
+    <div class="tf-step">
+      <span class="tf-icon">🧪</span>
+      <p class="tf-label g">Phase 2</p>
+      <p class="tf-text">POC<br>ClinicalKey AI+</p>
+    </div>
+    <div class="tf-step">
+      <span class="tf-icon">📄</span>
+      <p class="tf-label e">Phase 3</p>
+      <p class="tf-text">White Paper<br>Positionierung</p>
+    </div>
+    <div class="tf-step">
+      <span class="tf-icon">🎤</span>
+      <p class="tf-label o">Phase 4</p>
+      <p class="tf-text">Symposium<br>Sichtbarkeit</p>
+    </div>
+    <div class="tf-step">
+      <span class="tf-icon">🤝</span>
+      <p class="tf-label r">Phase 5</p>
+      <p class="tf-text">Lizenzierung<br>Strategisch gut platzierte Lizenzierungen sind das natürliche Ergebnis.</p>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="stmt-card r">
+      <p class="card-tag r">Harvard Negotiation</p>
+      <h3>Interessen vor Positionen</h3>
+      <p>Nicht: &bdquo;Was kostet die Lizenz?&rdquo; &mdash; sondern: &bdquo;Welches klinische Problem lösen wir gemeinsam?&rdquo; Wenn das beantwortet ist, ergibt sich Lizenzierung als logische Konsequenz.</p>
+    </div>
+    <div class="stmt-card r">
+      <p class="card-tag r">Realität KUK</p>
+      <h3>Notaufnahme als Testfeld</h3>
+      <p>Wissensmanagement ist in der Notaufnahme aktuell unterpriorisiert — genau hier liegt das größte Potenzial. Strukturierte KI-Unterstützung unter Zeitdruck: das ist die Kernchance.</p>
+    </div>
+  </div>
+
+  <div class="band r">
+    <p>Das Zielbild: ClinicalKey und AI als integrierte Wissensarchitektur für das KUK — mit ClinicalKey AI+ als produktspezifischer Umsetzung, nicht als Tool, sondern als strategische Infrastruktur.</p>
+    <span class="band-tag r">ClinicalKey</span>
+    <span class="band-tag r">ClinicalKey AI+</span>
+    <span class="band-tag r">Architektur</span>
+    <span class="band-tag r">Nicht Tool — Infrastruktur</span>
+  </div>
+
+</section>
+</div>
+
+<div class="div-tri"></div>
+
+<!-- ══════════════════════════
+     CLOSING / META-BOTSCHAFT
+══════════════════════════ -->
+
+<section id="closing">
+  <div class="closing-inner">
+
+```
+<p class="closing-eyebrow">Zentrale Meta-Botschaft</p>
+
+<h2 class="closing-h2">
+  Schatten-KI nicht verbieten —<br>
+  <em>sondern strukturieren.</em>
+</h2>
+
+<!-- Transform arrow flow -->
+<div class="close-flow">
+  <div class="cf-node bad">Unstrukturierte<br>KI-Nutzung</div>
+  <span class="cf-arrow">→</span>
+  <div class="cf-node mid">Strukturierte<br>Wissensarchitektur</div>
+  <span class="cf-arrow">→</span>
+  <div class="cf-node gd1">Governance &amp;<br>Compliance</div>
+  <span class="cf-arrow">→</span>
+  <div class="cf-node gd2">Kalibriertes<br>Vertrauen</div>
+</div>
+
+<!-- KPI Strip -->
+<div class="kpi-strip">
+  <div class="kpi"><span class="kpi-val c">DECISION</span><span class="kpi-label">Wissenschaftlicher Einstieg</span></div>
+  <div class="kpi"><span class="kpi-val g">AI+</span><span class="kpi-label">ClinicalKey Governance</span></div>
+  <div class="kpi"><span class="kpi-val e">WP</span><span class="kpi-label">Europäische Referenz</span></div>
+  <div class="kpi"><span class="kpi-val o">SYM</span><span class="kpi-label">Sichtbarer Leuchtturm</span></div>
+  <div class="kpi"><span class="kpi-val r">LIZ</span><span class="kpi-label">Natürliches Ergebnis</span></div>
+</div>
+
+<!-- Final HITL statement -->
+<div class="hitl-final">
+  <p>
+    <span style="color:var(--cyan);">Human-in-the-Loop</span> ist nicht nur ein technisches Prinzip —
+    es ist das ethische Fundament dieser Kooperation.
+    <br><br>
+    <span style="color:var(--thi);">Der Arzt entscheidet. KUK verantwortet. Elsevier ermöglicht.</span>
+    <br>
+    <span style="color:var(--tdim);font-size:0.9em;">Gemeinsam schaffen wir den Standard für evidenzbasierte klinische KI in Europa.</span>
+  </p>
+</div>
+```
+
+  </div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+
+<footer>
+  <span>KUK × Elsevier · Strategiepräsentation · 04.05.2026 · Linz</span>
+  <span>Von Evidence zu Vertrauen zu Struktur</span>
+</footer>
+
+<script>
+// Smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const t=document.querySelector(a.getAttribute('href'));
+    if(t) t.scrollIntoView({behavior:'smooth',block:'start'});
+  });
+});
+
+// Scroll-triggered fade-in
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.style.opacity='1';
+      e.target.style.transform='translateY(0)';
+    }
+  });
+},{threshold:0.08});
+
+document.querySelectorAll(
+  '.stmt-card,.tf-step,.cf-node,.kpi,.flow-node,.band,.hitl-wrap,.arch-wrap,.hitl-final,.pull'
+).forEach((el,i)=>{
+  el.style.opacity='0';
+  el.style.transform='translateY(16px)';
+  el.style.transition=`opacity 0.55s ease ${(i%5)*0.08}s,transform 0.55s ease ${(i%5)*0.08}s`;
+  obs.observe(el);
+});
+</script>
+
+</body>
+</html>
