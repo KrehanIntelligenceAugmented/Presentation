@@ -5,11 +5,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>KUK × Elsevier · KI im klinischen Wissensmanagement</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap');
 
 /* ══ TOKENS ══ */
 :root {
+color-scheme: dark;
 –bg:      #080a0f;
 –bg2:     #0c0f18;
 –bg3:     #111520;
@@ -41,9 +44,9 @@
 }
 
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-html{scroll-behavior:smooth;}
-html,body{overflow-x:hidden;}
-body{background:var(–bg);color:var(–text);font-family:‘DM Sans’,sans-serif;font-size:16px;line-height:1.75;}
+html{scroll-behavior:smooth;background:#080a0f;background-color:#080a0f;}
+html,body{overflow-x:hidden;background:#080a0f;background-color:#080a0f;}
+body{background-color:#080a0f;background:var(–bg,#080a0f);color:#c8d0e0;color:var(–text,#c8d0e0);font-family:‘DM Sans’,sans-serif;font-size:16px;line-height:1.75;}
 
 /* NOISE */
 body::before{content:’’;position:fixed;inset:0;pointer-events:none;z-index:0;opacity:0.28;
